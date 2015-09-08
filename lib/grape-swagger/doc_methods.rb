@@ -111,7 +111,7 @@ module GrapeSwagger
           end
         else
           param_type = case
-                       when path.include?(":#{param}")
+                       when path.include?(":#{param}") || path.include?("*#{param}")
                          'path'
                        when %w(POST PUT PATCH).include?(method)
                          if is_primitive?(data_type)
@@ -215,7 +215,7 @@ module GrapeSwagger
       # all it does is generate regular expressions for parsing URLs.
       # TODO: Implement a Racc tokenizer to properly generate the
       # parsed path.
-      parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
+      parsed_path = parsed_path.gsub(/[:*]([a-zA-Z_]\w*)/, '{\1}')
 
       # add the version
       version ? parsed_path.gsub('{version}', version) : parsed_path
